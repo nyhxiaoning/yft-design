@@ -20,6 +20,13 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path: "/projects",
+    component: () => import("@/views/Projects/index.vue"),
+    meta: {
+      title: '我的项目'
+    },
+  },
+  {
     path: "/github",
     component: () => import('@/views/OAuth/github.vue'),
     meta: { 

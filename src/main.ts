@@ -20,15 +20,22 @@ import Directive from "@/plugins/directive"
 import "virtual:svg-icons-register"
 
 async function start() {
-    const app = createApp(App);
-    await setupI18n(app)
-    app.use(router);
-    app.use(createPinia());
-    app.use(Icon);
-    app.use(SvgIcon);
-    app.use(Component);
-    app.use(Directive);
-    app.mount("#app");
+    try {
+        const app = createApp(App);
+        await setupI18n(app)
+        app.use(router);
+        app.use(createPinia());
+        app.use(Icon);
+        app.use(SvgIcon);
+        app.use(Component);
+        app.use(Directive);
+        app.mount("#app");
+        console.log('[yft] App mounted successfully')
+    } catch (err) {
+        console.error('[yft] App mount failed:', err)
+        document.querySelector('.first-screen-loading-text')!.textContent =
+            '加载失败: ' + (err as Error).message
+    }
 }
 
 start()

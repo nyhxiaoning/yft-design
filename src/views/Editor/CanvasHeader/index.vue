@@ -22,6 +22,15 @@
         <!-- <i class="handler-item iconfont icon-ruler" @click="changeRuler()" /> -->
         <IconRuler class="handler-item" @click="changeRuler()" />
       </el-tooltip>
+      <div class="handler-divider"></div>
+      <el-tooltip placement="top" :hide-after="0">
+        <template #content>保存项目</template>
+        <el-button size="small" type="primary" @click="saveProject" class="save-btn">保存</el-button>
+      </el-tooltip>
+      <el-tooltip placement="top" :hide-after="0">
+        <template #content>查看项目列表</template>
+        <el-button size="small" @click="goToProjects" class="projects-btn">项目</el-button>
+      </el-tooltip>
     </div>
 
     <div class="center-handler" v-show="canIntersection">
@@ -61,12 +70,14 @@
       </el-tooltip> -->
       <!-- <Lang /> -->
     </div>
+    <ProjectSave v-model="saveDialogVisible" :project-id="currentProjectId" @saved="onSaved" />
   </div>
 </template>
 
 <script lang="ts" setup>
 
 import { ref, computed } from "vue";
+import { useRouter } from 'vue-router'
 import { ElementNames } from "@/types/elements";
 import { storeToRefs } from "pinia";
 import { Object as FabricObject, Group } from "fabric";
@@ -77,7 +88,9 @@ import useHandleTool from "@/hooks/useHandleTool";
 import useCanvasScale from "@/hooks/useCanvasScale";
 import useHandleElement from "@/hooks/useHandleElement";
 import useHistorySnapshot from "@/hooks/useHistorySnapshot";
+import ProjectSave from './ProjectSave.vue'
 
+const router = useRouter()
 const fabricStore = useFabricStore();
 const mainStore = useMainStore();
 const templatesStore = useTemplatesStore();
@@ -149,6 +162,27 @@ const intersection = (val: number) => {
 const applyCanvasPresetScale = (value: number) => {
   setCanvasScalePercentage(value);
 };
+
+// 项目保存相关
+const saveDialogVisible = ref(false)
+const currentProjectId = ref<string | undefined>(undefined)
+
+const saveProject = () => {
+  const route = router.currentRoute.value
+  currentProjectId.value = route.query.projectId as string | undefined
+  saveDialogVisible.value = true
+}
+
+const goToProjects = () => {
+  const { href } = router.resolve({ path: '/projects' })
+  window.open(href, '_blank')
+}
+
+const onSaved = () => {
+  // 保存后更新当前路由的 projectId（如果是新建项目）
+  // 实际 projectId 在 ProjectSave 组件中通过 nanoid 生成
+}
+
 // const setZoom = ()
 </script>
 
@@ -156,6 +190,18 @@ const applyCanvasPresetScale = (value: number) => {
 .left-handler {
   display: flex;
   align-items: center;
+
+  .handler-divider {
+    width: 1px;
+    height: 20px;
+    background: #e0e0e0;
+    margin: 0 8px;
+  }
+
+  .save-btn,
+  .projects-btn {
+    margin-left: 4px;
+  }
 }
 .center-handler {
   position: absolute;

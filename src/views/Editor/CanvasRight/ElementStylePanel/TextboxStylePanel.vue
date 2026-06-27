@@ -239,7 +239,7 @@ import { nanoid } from 'nanoid'
 import { ArcText } from '@/extension/object/ArcText'
 import { CurvedText } from '@/extension/object/CurvedText'
 import { VerticalText } from '@/extension/object/VerticalText'
-import opentype from "opentype.js"
+import * as opentype from "opentype.js"
 import ElementPosition from '../Components/ElementPosition.vue'
 import ElementStroke from '../Components/ElementStroke.vue'
 import ElementShadow from '../Components/ElementShadow.vue'

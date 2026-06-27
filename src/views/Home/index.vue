@@ -18,7 +18,7 @@
       </el-header>
       <el-container>
         <el-aside width="216px">
-          <el-menu active-text-color="#000" default-active="1" class="pt-[20px] h-lvh">
+          <el-menu active-text-color="#000" default-active="1" class="pt-[20px] h-lvh" @select="handleMenuSelect">
             <el-menu-item index="1">
               <span class="flex w-[30px] justify-center">
                 <IconNavigation/>
@@ -36,6 +36,12 @@
                 <IconViewList/>
               </span>
               <span>模版空间</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+              <span class="flex w-[30px] justify-center">
+                <IconViewList/>
+              </span>
+              <span>我的项目</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -150,6 +156,13 @@ const changeTemplate = (pk: number) => {
     }
   })
   window.open(href, '_blank')
+}
+
+const handleMenuSelect = (index: string) => {
+  if (index === '4') {
+    const { href } = router.resolve({ path: '/projects' })
+    window.open(href, '_blank')
+  }
 }
 
 let observer: ResizeObserver;
