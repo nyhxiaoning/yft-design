@@ -6,7 +6,14 @@
           <el-col :span="4" class="h-[50px]">
             <img src="@/assets/logo.svg" alt="" class="h-full">
           </el-col>
-          <el-col :span="6" class="flex justify-end col-user">
+          <el-col :span="6" class="flex justify-end items-center col-user">
+            <el-tooltip content="GitHub 同步" placement="bottom">
+              <el-button text @click="syncDialogVisible = true" class="github-sync-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+              </el-button>
+            </el-tooltip>
             <el-button type="primary" @click="createNew">+ 新建海报</el-button>
           </el-col>
         </el-row>
@@ -66,6 +73,7 @@
         </el-main>
       </el-container>
     </el-container>
+    <GithubSync v-model="syncDialogVisible" />
   </div>
 </template>
 
@@ -75,10 +83,13 @@ import { useRouter } from 'vue-router'
 import { useProjectStore } from '@/store'
 import { ElMessageBox } from 'element-plus'
 import type { SavedProject } from '@/types/project'
+import GithubSync from './GithubSync.vue'
 
 const router = useRouter()
 const projectStore = useProjectStore()
 const { projectList: projects } = storeToRefs(projectStore)
+
+const syncDialogVisible = ref(false)
 
 onMounted(() => {
   projectStore.loadProjects()
@@ -125,6 +136,23 @@ const handleDelete = async (project: SavedProject) => {
 <style lang="scss" scoped>
 .col-user {
   display: flex;
+  gap: 8px;
+
+  .github-sync-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: #555;
+    transition: all 0.14s;
+
+    &:hover {
+      background: #f0f0f0;
+      color: #000;
+    }
+  }
 }
 .el-aside .el-menu .el-menu-item {
   height: 40px;
